@@ -1,0 +1,43 @@
+name: Birthdays Daily
+
+on:
+  schedule:
+    - cron: "5 5 * * *"   # 09:05 Тбилиси (UTC+4) = 05:05 UTC
+  workflow_dispatch: {}    # ручной запуск из Actions
+
+permissions:
+  contents: read
+
+concurrency:
+  group: birthdays-daily
+  cancel-in-progress: true
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # Заглушка: логики пока нет, но cron работает и джоба зелёная
+      - name: Run daily script (placeholder)
+        shell: bash
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TARGET_CHAT_ID: ${{ secrets.TARGET_CHAT_ID }}
+        run: |
+          set -euo pipefail
+          if [ -f "src/daily.mjs" ]; then
+            echo "Placeholder: скрипт ещё не написан. Cron настроен, секреты подключены."
+            exit 0
+          else
+            echo "Нет файла src/daily.mjs" >&2
+            exit 1
+          fi
